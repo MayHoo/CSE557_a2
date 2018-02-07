@@ -23,6 +23,8 @@ float a, b, c, d;
 float an, bn, cn, dn;
 float step = 250;
 int frame = 0;
+float[] am;
+float[] bm;
 
 void setup(){
   //frameRate(1);
@@ -32,6 +34,8 @@ void setup(){
   println(table.getRowCount() + " total rows in table"); 
   int n = table.getRowCount();
   numbers = new float[n];
+  am = new float[n];
+  bm = new float[n];
   costs = new String[n];
   angles = new float[n+1];
   angles[0] = 0;
@@ -45,11 +49,12 @@ void setup(){
     costs[i] = cost;
     numbers[i] = time;
     total = (int)(total + time);
-    println (total);
+    //println (total);
     i++;
   }
   for (int j = 1; j<n; j++) {
      angles[j] = angles[j-1] + radians((numbers[j-1]/total)*360);
+     //println(angles[j]);
   }//int total = sum(numbers);
 }  
 
@@ -64,6 +69,7 @@ void draw(){
     textAlign(CENTER, CENTER);
     //current state
     text(str1, xpercent*100, ypercent*23);
+    text("cost/occurrence", xpercent*320, ypercent*23);
     //buttons
     rect(xpercent*560, ypercent*10, xpercent*50, ypercent*30);
     rect(xpercent*630, ypercent*10, xpercent*50, ypercent*30);
@@ -82,7 +88,7 @@ void draw(){
     textAlign(RIGHT, CENTER);
     fill(255);
     if(str == str1) frame = 0;
-    if(str1 != "pie") {
+    if(str == "line" || str == "bar") {
       //ticks and axis for line and bar chart
       for(int i=0;i<y_ticks;i++){
         stroke(255,255,255);
@@ -225,12 +231,46 @@ void draw(){
           transform(current, str, j, a, c, d, frame);
         }
       }
-      if(str == "pie") {
-        str1 = "pie";
+      if ((current == "line"||current == "bar") && str == "pie") {
+        for (int j = 0; j<numbers.length; j++) {
+          a = (j+0.5)*w+margin;
+          b = 640-h*numbers[j]-margin;
+          c = 10;
+          d = 10;
+          an = (325)+((640-2*margin)/2)*cos(angles[j]);
+          bn = (640/2)+((640-2*margin)/2)*sin(angles[j]);
+          println(an);
+          //if(frame<step-20){
+          //if(a>(800-150-640+2*margin)/2 && a<(325+270) && b>50 && b<590) {
+            a = a+frame*(an-a)/(step-20);
+            b = b+frame*(bn-b)/(step-20);
+          //}
+          transform(current, str, j, a, b, d, frame);
+        }
       }
-      if(current == "pie" && str1 != "pie") {
-        str1 = str;
+      if (current == "pie" && str != "pie") {
+        for (int j = 0; j<numbers.length; j++) {
+          a = (j+0.5)*w+margin;
+          b = 640-h*numbers[j]-margin;
+          c = 10;
+          d = 10;
+          an = (325)+((640-2*margin)/2)*cos(angles[j]);
+          bn = (640/2)+((640-2*margin)/2)*sin(angles[j]);
+          println(an);
+          //if(frame<step-20){
+          //if(a>(800-150-640+2*margin)/2 && a<(325+270) && b>50 && b<590) {
+            an = an+frame*(a-an)/(step-20);
+            bn = bn+frame*(b-bn)/(step-20);
+          //}
+          transform(current, str, j, an, bn, d, frame);
+        }
       }
+      //if(str == "pie") {
+        //str1 = "pie";
+      //}
+      //if(current == "pie" && str1 != "pie") {
+        //str1 = str;
+      //}
     }
    if(frame<step) frame = frame +1;
 }
@@ -254,9 +294,45 @@ void transform(String current, String change, int i, float a, float c, float d, 
     if (change == "bar") {
       if (frame < step) {
         fill(colors[i]);
-        println(a);
+        //println(a);
         rect(xpercent*a, ypercent*(640-h*numbers[i]-margin), xpercent*c, ypercent*d);
       }
+      else str1 = change;
+    }
+  }
+  if (current == "line" || current == "bar"){
+    if (change == "pie") {
+      if (frame < step-20) {
+        fill(colors[i]);
+        //println(a);
+        rect(xpercent*a, ypercent*b, xpercent*10, ypercent*10);
+        am[i] = a;
+        bm[i] = b;
+      }
+      else if(frame<step) {
+        fill(colors[i]);
+        rect(xpercent*am[i], ypercent*bm[i], xpercent*10, ypercent*10);
+        stroke(255);
+        line(xpercent*am[i],ypercent*bm[i],xpercent*325,ypercent*320);
+      } 
+      else str1 = change;
+    }
+  }
+  if (current == "pie"){
+    if (change != "pie") {
+      if (frame < step-20) {
+        fill(colors[i]);
+        //println(a);
+        rect(xpercent*a, ypercent*c, xpercent*10, ypercent*10);
+        am[i] = a;
+        bm[i] = b;
+      }
+      //else if(frame<step) {
+      //  fill(colors[i]);
+      //  rect(xpercent*am[i], ypercent*bm[i], xpercent*10, ypercent*10);
+      //  stroke(255);
+      //  line(xpercent*am[i],ypercent*bm[i],xpercent*325,ypercent*320);
+      //} 
       else str1 = change;
     }
   }
