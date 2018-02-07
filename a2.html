@@ -1,10 +1,11 @@
 <html>
           <head>
-                    <title>Processing in HTML5</title>
+                    <title>Cost/Occurrence_557_a2</title>
                     <script type="text/javascript" src="processing.js"></script>
           </head>
           <body>
-                    <script type="application/processing" >
+                    <p>Cost/Occurrence_557_a2</p>
+					<script type="application/processing" >
 					Table table;
 float[] numbers;
 float[] angles;
@@ -263,7 +264,7 @@ void transform(String current, String change, int i, float a, float c, float d, 
     if (change == "bar") {
       if (frame < step) {
         fill(colors[i]);
-        println(a);
+        //println(a);
         rect(xpercent*a, ypercent*(640-h*numbers[i]-margin), xpercent*c, ypercent*d);
       }
       else str1 = change;
