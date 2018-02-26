@@ -4,7 +4,7 @@ echo ">>> aligning example reads"
 # align RNA-seq reads to genome reference with bowtie2
 # /project/cic3/Genome/hg_ncRNA/hg_All -- bowtie2 index of human, file.fastq -- your raw RNA-seq file, file.sam -- bowtie2 output file
 # bowtie2 -p16 --very-sensitive --mm -D20 --score-min=C,-15,0 --phred33 -x /project/cic3/Genome/hg_ncRNA/hg_All -U file.fastq -S ./chim/file.sam
-bowtie2 -p16 --very-sensitive --mm -D20 --score-min=C,-15,0 --phred33 -x /project/cic3/Genome/hg_ncRNA/hg_All -U /project/cic5/pso_GSE67785/PN/SRR1970400.fastq.bz2 -S ./chim/file.sam
+bowtie2 -p16 --very-sensitive --mm -D20 --score-min=C,-15,0 --phred33 -x /project/cic3/Genome/hg_ncRNA/hg_All -U /project/cic5/xiaox/pso_GSE67785/PN/SRR1970400.fastq.bz2 -S ./chim/file.sam
 # -p processing num?
 #
 # --very-sensitive Same as: -D 20 -R 3 -N 0 -L 20 -i S,1,0.50
